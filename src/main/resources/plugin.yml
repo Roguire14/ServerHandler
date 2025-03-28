@@ -1,0 +1,5 @@
+name: ServerHandler
+version: '${project.version}'
+main: fr.roguire.serverhandler.ServerHandler
+api-version: '1.21'
+load: STARTUP

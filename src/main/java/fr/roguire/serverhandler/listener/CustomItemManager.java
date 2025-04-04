@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-import static fr.roguire.serverhandler.utils.UsefullFonctions.getDisplayName;
+import static fr.roguire.serverhandler.utils.UsefullFunctions.getDisplayName;
 
 public class CustomItemManager implements Listener {
     private static final Map<String, CustomItem> customItems = new HashMap<>();

@@ -6,12 +6,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.Inventory;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static fr.roguire.serverhandler.utils.UsefullFonctions.getDisplayName;
+import static fr.roguire.serverhandler.utils.UsefullFunctions.getDisplayName;
 
 public class InventoryListeners implements Listener {
 

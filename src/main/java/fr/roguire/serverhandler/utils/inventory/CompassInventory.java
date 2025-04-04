@@ -1,7 +1,5 @@
 package fr.roguire.serverhandler.utils.inventory;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import fr.roguire.serverhandler.ServerHandler;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -13,7 +11,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import static fr.roguire.serverhandler.utils.UsefullFonctions.*;
+import static fr.roguire.serverhandler.utils.UsefullFunctions.*;
 
 public class CompassInventory extends CustomInventoryBordered {
 

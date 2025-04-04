@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class UsefullFonctions {
+public class UsefullFunctions {
 
     public static void setSwordAttributeModifiers(ItemStack sword, ItemMeta swordMeta){
         NamespacedKey namespace = new NamespacedKey("plugin", "attack_speed");
@@ -26,6 +26,10 @@ public class UsefullFonctions {
             material == Material.GOLDEN_SWORD ||
             material == Material.DIAMOND_SWORD ||
             material == Material.NETHERITE_SWORD;
+    }
+
+    public static boolean isSword(ItemStack sword){
+        return isSword(sword.getType());
     }
 
     public static String getDisplayName(Component itemComponent){

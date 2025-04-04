@@ -28,9 +28,9 @@ public class BungeeListener implements PluginMessageListener {
         Set<String> uhcServers = new HashSet<>();
         Set<String> miniGameServers = new HashSet<>();
         for (String s : server) {
-            if(s.startsWith("minecraft-uhc"))
+            if(s.startsWith("minecraft-pvp"))
                 uhcServers.add(s);
-            else if (s.startsWith("minecraft-miniGame")) {
+            else if (s.startsWith("minecraft-minigame")) {
                 miniGameServers.add(s);
             }
         }

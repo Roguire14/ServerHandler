@@ -10,17 +10,18 @@ import fr.roguire.serverhandler.listener.items.CompassListener;
 import fr.roguire.serverhandler.listener.player.OnJoinEvent;
 import fr.roguire.serverhandler.utils.BungeeCordCommunicator;
 import fr.roguire.serverhandler.utils.EventsUtil;
-import fr.roguire.serverhandler.utils.inventory.*;
+import fr.roguire.serverhandler.utils.inventory.AdminInventory;
+import fr.roguire.serverhandler.utils.inventory.CustomInventory;
+import fr.roguire.serverhandler.utils.inventory.MiniGameInventory;
+import fr.roguire.serverhandler.utils.inventory.UHCInventory;
 import fr.roguire.serverhandler.utils.items.TeleporterCompass;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
-import static fr.roguire.serverhandler.utils.UsefullFonctions.getDisplayName;
+import static fr.roguire.serverhandler.utils.UsefullFunctions.getDisplayName;
 
 public final class ServerHandler extends JavaPlugin {
 

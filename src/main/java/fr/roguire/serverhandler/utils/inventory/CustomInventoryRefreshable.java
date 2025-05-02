@@ -13,8 +13,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
-import static fr.roguire.serverhandler.utils.UsefullFunctions.isSword;
-import static fr.roguire.serverhandler.utils.UsefullFunctions.setSwordAttributeModifiers;
+import static fr.roguire.serverhandler.utils.UsefullFunctions.*;
 
 public abstract class CustomInventoryRefreshable extends CustomInventory{
 
@@ -93,6 +92,7 @@ public abstract class CustomInventoryRefreshable extends CustomInventory{
         if(isSword(item)) setSwordAttributeModifiers(item, meta);
         meta.displayName(Component.text(itemNameJoined.toUpperCase()));
         item.setItemMeta(meta);
+        setUnstackable(item);
     }
 
     protected abstract void addNewItem(String entry);

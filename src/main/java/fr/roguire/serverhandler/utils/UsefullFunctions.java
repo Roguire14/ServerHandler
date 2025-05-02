@@ -9,6 +9,9 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+
+import java.util.UUID;
 
 public class UsefullFunctions {
 
@@ -32,7 +35,24 @@ public class UsefullFunctions {
         return isSword(sword.getType());
     }
 
+    public static boolean isGlassPane(Material material){
+        return material.name().endsWith("GLASS_PANE");
+    }
+
+    public static boolean isGlassPane(ItemStack item){
+        return isGlassPane(item.getType());
+    }
+
     public static String getDisplayName(Component itemComponent){
         return PlainTextComponentSerializer.plainText().serialize(itemComponent).replaceAll("^\\[|]$","");
+    }
+
+    public static void setUnstackable(ItemStack item){
+        ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer()
+            .set(new NamespacedKey("plugin","unique_id"),
+                PersistentDataType.STRING,
+                UUID.randomUUID().toString());
+        item.setItemMeta(meta);
     }
 }

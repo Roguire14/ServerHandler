@@ -31,4 +31,6 @@ public abstract class CustomInventoryBordered extends CustomInventory {
                 inventory.setItem(invSize-1-i*9, borderItem);
         }
     }
+
+
 }

@@ -74,10 +74,8 @@ public class CompassInventory extends CustomInventoryBordered {
     }
 
     @Override
-    public void handleClick(InventoryClickEvent event) {
+    protected void handleValidClick(InventoryClickEvent event) {
         ItemStack item = event.getCurrentItem();
-        if(item == null) return;
-        if(item.getItemMeta() == null) return;
         Player player = (Player) event.getWhoClicked();
         if(getDisplayName(item.displayName()).equals(survivalServerName)) {
             sendToSurvivalServer(event);

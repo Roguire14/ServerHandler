@@ -20,10 +20,7 @@ public class UHCInventory extends CustomInventoryRefreshable{
     }
 
     @Override
-    public void handleClick(InventoryClickEvent event) {
-        ItemStack item = event.getCurrentItem();
-        if(item == null) return;
-        if(item.getItemMeta() == null) return;
+    protected void handleValidClick(InventoryClickEvent event) {
         String serverName = nameHandler.get(event.getCurrentItem());
         plugin.sendToServer((Player) event.getWhoClicked(), serverName);
     }

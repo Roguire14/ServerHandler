@@ -6,8 +6,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import static fr.roguire.serverhandler.utils.UsefullFunctions.getDisplayName;
+import static fr.roguire.serverhandler.utils.UsefullFunctions.isGlassPane;
 
 public abstract class CustomInventory {
 
@@ -39,7 +41,13 @@ public abstract class CustomInventory {
         return inventory;
     }
 
-    public abstract void handleClick(InventoryClickEvent event);
+    public void handleClick(InventoryClickEvent event){
+        ItemStack item = event.getCurrentItem();
+        if (item == null || item.getItemMeta() == null || isGlassPane(item)) return;
+        handleValidClick(event);
+    }
+
+    protected abstract void handleValidClick(InventoryClickEvent event);
 
     public void handleClosing(InventoryCloseEvent event) {}
 

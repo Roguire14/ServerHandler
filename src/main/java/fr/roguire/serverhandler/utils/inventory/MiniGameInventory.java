@@ -11,6 +11,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Set;
 
+import static fr.roguire.serverhandler.utils.UsefullFunctions.setUnstackable;
+
 public class MiniGameInventory extends CustomInventoryRefreshable{
 
     public MiniGameInventory(ServerHandler plugin) {
@@ -20,10 +22,7 @@ public class MiniGameInventory extends CustomInventoryRefreshable{
     }
 
     @Override
-    public void handleClick(InventoryClickEvent event) {
-        ItemStack item = event.getCurrentItem();
-        if(item == null) return;
-        if(item.getItemMeta() == null) return;
+    protected void handleValidClick(InventoryClickEvent event) {
         plugin.sendToServer((Player) event.getWhoClicked(), nameHandler.get(event.getCurrentItem()));
     }
 

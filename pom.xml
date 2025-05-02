@@ -47,6 +47,9 @@
       <resource>
         <directory>src/main/resources</directory>
         <filtering>true</filtering>
+          <includes>
+              <include>**/*.env</include>
+        </includes>
       </resource>
     </resources>
   </build>
@@ -68,6 +71,11 @@
           <artifactId>paper-api</artifactId>
           <version>1.21-R0.1-SNAPSHOT</version>
           <scope>provided</scope>
+      </dependency>
+      <dependency>
+          <groupId>io.github.cdimascio</groupId>
+          <artifactId>dotenv-java</artifactId>
+          <version>3.2.0</version>
       </dependency>
   </dependencies>
 </project>

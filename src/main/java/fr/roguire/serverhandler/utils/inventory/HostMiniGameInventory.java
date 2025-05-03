@@ -42,20 +42,7 @@ public class HostMiniGameInventory extends CustomInventory implements HostInvent
 
     @Override
     public void fillHostItems() {
-        communicator.sendGetRequest("config/get-config/minigame/")
-            .thenAccept(response -> {
-                if(response == null) return;
-                int statusCode = response.get("status").getAsInt();
-                switch(statusCode) {
-                    case 409:
-                        fillHostItems();
-                        break;
-                    case 200:
-                        JsonObject answer = response.get("message").getAsJsonObject();
-                        addHostItems(answer, inventory, items);
-                        break;
-                }
-            });
+        fetchConfig("minigame", inventory, items, communicator);
     }
 
     @Override

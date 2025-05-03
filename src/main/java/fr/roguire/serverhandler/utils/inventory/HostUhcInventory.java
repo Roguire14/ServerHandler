@@ -35,27 +35,12 @@ public class HostUhcInventory extends CustomInventory implements HostInventory {
 
     @Override
     public void fillHostItems() {
-        communicator.sendGetRequest("config/get-config/pvp")
-            .thenAccept(response -> {
-                if(response == null) return;
-                int statusCode = response.get("status").getAsInt();
-                switch(statusCode) {
-                    case 409:
-                        fillHostItems();
-                        break;
-                    case 200:
-                        JsonObject answer = response.get("message").getAsJsonObject();
-                        addHostItems(answer, inventory, items);
-                        break;
-                }
-            });
+        fetchConfig("pvp", inventory, items, communicator);
     }
 
     @Override
     protected void handleValidClick(InventoryClickEvent event) {
         String blockName = getDisplayName(event.getCurrentItem().displayName());
-        System.out.println(blockName);
-        System.out.println(items.get(blockName.toLowerCase()));
         host.hostGame(items.get(blockName.toLowerCase()), (Player) event.getWhoClicked());
     }
 }

@@ -30,8 +30,15 @@ public class GameHoster {
         communicator.sendPostRequest("start-server", jsonBody)
             .thenAccept(jsonResponse -> {
                 if(jsonResponse == null) return;
+                System.out.println(jsonResponse);
                 int statusCode = jsonResponse.get("status").getAsInt();
-                String message = jsonResponse.get("message").getAsString();
+                Object answer;
+                try{
+                    answer = jsonResponse.get("message").getAsString();
+                }catch (Exception e){
+                    throw new RuntimeException(e);
+                }
+                String message = (String)answer;
                 switch (statusCode){
                     case 200:
                         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {

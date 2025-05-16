@@ -1,7 +1,8 @@
 package fr.roguire.serverhandler.utils.items;
 
 import fr.roguire.serverhandler.ServerHandler;
-import fr.roguire.serverhandler.utils.inventory.*;
+import fr.roguire.serverhandler.utils.inventory.CompassInventory;
+import fr.roguire.serverhandler.utils.inventory.CustomInventory;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;

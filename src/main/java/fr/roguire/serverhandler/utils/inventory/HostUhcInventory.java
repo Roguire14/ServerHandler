@@ -1,6 +1,5 @@
 package fr.roguire.serverhandler.utils.inventory;
 
-import com.google.gson.JsonObject;
 import fr.roguire.serverhandler.ServerHandler;
 import fr.roguire.serverhandler.utils.api.ApiCommunicator;
 import fr.roguire.serverhandler.utils.inventory.models.GameHoster;

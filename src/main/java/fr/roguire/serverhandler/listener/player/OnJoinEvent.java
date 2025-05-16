@@ -1,7 +1,6 @@
 package fr.roguire.serverhandler.listener.player;
 
 import fr.roguire.serverhandler.utils.items.CustomItem;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

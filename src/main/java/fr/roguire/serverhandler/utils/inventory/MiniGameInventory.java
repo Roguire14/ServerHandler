@@ -1,17 +1,12 @@
 package fr.roguire.serverhandler.utils.inventory;
 
 import fr.roguire.serverhandler.ServerHandler;
+import fr.roguire.serverhandler.utils.models.HostedServer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Set;
-
-import static fr.roguire.serverhandler.utils.UsefullFunctions.setUnstackable;
 
 public class MiniGameInventory extends CustomInventoryRefreshable{
 
@@ -22,21 +17,13 @@ public class MiniGameInventory extends CustomInventoryRefreshable{
     }
 
     @Override
-    protected void handleValidClick(InventoryClickEvent event) {
-        plugin.sendToServer((Player) event.getWhoClicked(), nameHandler.get(event.getCurrentItem()));
+    protected void addNewServer(HostedServer server) {
+        serversInInventory.add(server);
+        inventory.addItem(server.block());
     }
 
     @Override
-    protected void addNewItem(String entry) {
-        ItemStack item = new ItemStack(Material.CLOCK);
-        setBlockData(item, entry);
-        nameHandler.put(item, entry);
-        items.put(entry, item);
-        inventory.addItem(item);
-    }
-
-    @Override
-    protected Set<String> getActiveServers() {
-        return plugin.getMiniGameServers();
+    protected Set<HostedServer> getActiveServers() {
+        return plugin.getServers().getMinigameServers();
     }
 }

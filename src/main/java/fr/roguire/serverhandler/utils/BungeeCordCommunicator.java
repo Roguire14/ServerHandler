@@ -18,4 +18,10 @@ public class BungeeCordCommunicator {
         serverHandler.getServer().sendPluginMessage(serverHandler, "BungeeCord", out.toByteArray());
     }
 
+    public void getServerName(){
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("GetServer");
+        serverHandler.getServer().sendPluginMessage(serverHandler, "BungeeCord", out.toByteArray());
+    }
+
 }

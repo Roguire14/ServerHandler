@@ -1,13 +1,10 @@
 package fr.roguire.serverhandler.utils.inventory;
 
 import fr.roguire.serverhandler.ServerHandler;
+import fr.roguire.serverhandler.utils.models.HostedServer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Set;
 
@@ -20,22 +17,13 @@ public class UHCInventory extends CustomInventoryRefreshable{
     }
 
     @Override
-    protected void handleValidClick(InventoryClickEvent event) {
-        String serverName = nameHandler.get(event.getCurrentItem());
-        plugin.sendToServer((Player) event.getWhoClicked(), serverName);
+    protected void addNewServer(HostedServer server) {
+        serversInInventory.add(server);
+        inventory.addItem(server.block());
     }
 
     @Override
-    protected void addNewItem(String name) {
-        ItemStack uhcItem = new ItemStack(Material.IRON_SWORD);
-        setBlockData(uhcItem, name);
-        nameHandler.put(uhcItem, name);
-        items.put(name, uhcItem);
-        inventory.addItem(uhcItem);
-    }
-
-    @Override
-    protected Set<String> getActiveServers() {
-        return plugin.getUHCServers();
+    protected Set<HostedServer> getActiveServers() {
+        return plugin.getServers().getPvpServers();
     }
 }

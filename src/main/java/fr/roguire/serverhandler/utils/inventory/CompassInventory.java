@@ -35,8 +35,8 @@ public class CompassInventory extends CustomInventoryBordered {
 
     private void addServers() {
         inventory.setItem(22, createSurvivalServerItem());
-        if(plugin.getMiniGameServers().isEmpty()) inventory.setItem(20, createMiniGamesItem());
-        if(plugin.getUHCServers().isEmpty()) inventory.setItem(24, createUHCItem());
+        if(plugin.getServers().getMinigameServers().isEmpty()) inventory.setItem(20, createMiniGamesItem());
+        if(plugin.getServers().getPvpServers().isEmpty()) inventory.setItem(24, createUHCItem());
     }
 
     private ItemStack createUHCItem() {

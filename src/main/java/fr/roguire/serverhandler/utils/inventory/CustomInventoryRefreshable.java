@@ -1,26 +1,29 @@
 package fr.roguire.serverhandler.utils.inventory;
 
 import fr.roguire.serverhandler.ServerHandler;
+import fr.roguire.serverhandler.utils.models.HostedServer;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.*;
-
-import static fr.roguire.serverhandler.utils.UsefullFunctions.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public abstract class CustomInventoryRefreshable extends CustomInventory{
 
     protected final ServerHandler plugin;
     protected BukkitTask refreshingTask;
-    protected final Map<String, ItemStack> items = new HashMap<>();
-    protected final Map<ItemStack, String> nameHandler = new HashMap<>();
+    protected final Set<HostedServer> serversInInventory = new HashSet<>();
     protected final List<Player> playersSeeingInventory;
 
     public CustomInventoryRefreshable(ServerHandler plugin, int size, Component component) {
@@ -50,56 +53,39 @@ public abstract class CustomInventoryRefreshable extends CustomInventory{
         if(playersSeeingInventory.isEmpty()) stopRefreshing();
     }
 
+    @Override
+    protected void handleValidClick(InventoryClickEvent event) {
+        ItemStack item = event.getCurrentItem();
+        if(item == null) return;
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        NamespacedKey key = new NamespacedKey(plugin, "server_name");
+        if(!container.has(key, PersistentDataType.STRING)) return;
+        String serverName = meta.getPersistentDataContainer().get(key, PersistentDataType.STRING);
+
+        plugin.sendToServer((Player) event.getWhoClicked(), serverName);
+    }
+
     private void refreshInventory() {
         plugin.getBungeeCordCommunicator().refreshServer();
-        Set<String> activeServers = getActiveServers();
-        Set<String> newServers = new HashSet<>();
+        Set<HostedServer> activeServers = getActiveServers();
 
-        for(String entry: activeServers) {
-            newServers.add(entry);
-            if(!items.containsKey(entry)) addNewItem(entry);
+        for(HostedServer server : activeServers) {
+            if (serversInInventory.add(server)) addNewServer(server);
         }
 
-        List<String> toRemove = new ArrayList<>();
-        items.keySet().forEach(s -> {
-            if(!activeServers.contains(s)) toRemove.add(s);
-        });
-        toRemove.forEach( x -> {
-            nameHandler.remove(items.get(x));
-            items.remove(x);
-        });
+        serversInInventory.removeIf(server -> !activeServers.contains(server));
         inventory.clear();
         fillInventory();
     }
 
     private void fillInventory() {
-        items.values().forEach(inventory::addItem);
+        serversInInventory.forEach(s -> {
+            inventory.addItem(s.block());
+        });
     }
 
-    protected void setBlockData(ItemStack item, String fullName){
-        ItemMeta meta = item.getItemMeta();
-        String[] split = fullName.split("-");
-        String[] itemName = Arrays.copyOfRange(split, 2, split.length-2);
-        String itemNameJoined = String.join(" ", itemName);
-        meta.lore(List.of(
-            Component.text("Host: ", NamedTextColor.DARK_AQUA)
-                .decorate(TextDecoration.BOLD)
-                .append(
-                    Component.text(split[split.length-1], NamedTextColor.GOLD)
-                        .decorate(TextDecoration.ITALIC).decoration(TextDecoration.BOLD, false)
-                )
-        ));
-        if(isSword(item)) setSwordAttributeModifiers(item, meta);
-        meta.displayName(Component.text(itemNameJoined.toUpperCase()));
-        item.setItemMeta(meta);
-        setUnstackable(item);
-    }
-
-    protected abstract void addNewItem(String entry);
-
-    protected abstract Set<String> getActiveServers();
-
-    protected record ItemClickable(String fullName, String displayName, ItemStack item) {
-    }
+    protected abstract void addNewServer(HostedServer server);
+    protected abstract Set<HostedServer> getActiveServers();
 
 }

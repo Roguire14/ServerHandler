@@ -30,7 +30,6 @@ public class GameHoster {
         communicator.sendPostRequest("start-server", jsonBody)
             .thenAccept(jsonResponse -> {
                 if(jsonResponse == null) return;
-                System.out.println(jsonResponse);
                 int statusCode = jsonResponse.get("status").getAsInt();
                 Object answer;
                 try{

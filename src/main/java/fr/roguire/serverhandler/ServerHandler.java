@@ -10,6 +10,8 @@ import fr.roguire.serverhandler.listener.items.CompassListener;
 import fr.roguire.serverhandler.listener.player.OnJoinEvent;
 import fr.roguire.serverhandler.utils.BungeeCordCommunicator;
 import fr.roguire.serverhandler.utils.EventsUtil;
+import fr.roguire.serverhandler.utils.RunningServers;
+import fr.roguire.serverhandler.utils.api.ApiCommunicator;
 import fr.roguire.serverhandler.utils.api.ApiConfig;
 import fr.roguire.serverhandler.utils.inventory.AdminInventory;
 import fr.roguire.serverhandler.utils.inventory.CustomInventory;
@@ -20,30 +22,27 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import static fr.roguire.serverhandler.utils.UsefullFunctions.getDisplayName;
 
 public final class ServerHandler extends JavaPlugin {
-
-    private final Set<String> miniGameServers;
-    private final Set<String> uhcServers;
     private final BungeeCordCommunicator bungeeCordCommunicator;
     private final InventoryListeners inventoryListeners;
     private static ServerHandler instance;
+    private ApiCommunicator apiCommunicator;
+    private final RunningServers servers;
 
     public ServerHandler() {
-        miniGameServers = new HashSet<>();
-        uhcServers = new HashSet<>();
         bungeeCordCommunicator = new BungeeCordCommunicator(this);
         inventoryListeners = new InventoryListeners(this);
+        servers = new RunningServers(this);
     }
 
     @Override
     public void onEnable() {
         instance = this;
         ApiConfig.initializeApiConfig("http://host.docker.internal",25550);
+        apiCommunicator = new ApiCommunicator();
+        apiCommunicator.loginToApi();
 
         CustomInventory adminInventory = new AdminInventory(this);
         CustomInventory miniGameInventory = new MiniGameInventory(this);
@@ -67,21 +66,12 @@ public final class ServerHandler extends JavaPlugin {
         getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new BungeeListener(this));
 
         getConfig().options().copyDefaults(true);
-//        getCommand("start").setExecutor(new StartCommand(this));
     }
 
     @Override
     public void onDisable() {
         instance = null;
         Bukkit.getScheduler().cancelTasks(this);
-    }
-
-    public Set<String> getMiniGameServers() {
-        return miniGameServers;
-    }
-
-    public Set<String> getUHCServers() {
-        return uhcServers;
     }
 
     public BungeeCordCommunicator getBungeeCordCommunicator() {
@@ -101,5 +91,13 @@ public final class ServerHandler extends JavaPlugin {
 
     public static ServerHandler getInstance(){
         return instance;
+    }
+
+    public ApiCommunicator getApiCommunicator() {
+        return apiCommunicator;
+    }
+
+    public RunningServers getServers() {
+        return servers;
     }
 }

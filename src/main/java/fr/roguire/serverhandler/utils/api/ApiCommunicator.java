@@ -2,20 +2,18 @@ package fr.roguire.serverhandler.utils.api;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import fr.roguire.serverhandler.ServerHandler;
 import fr.roguire.serverhandler.utils.Env;
 import org.bukkit.Bukkit;
-import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,7 +23,6 @@ public class ApiCommunicator {
     private final Gson gson;
     private final AtomicBoolean reauthInProgress = new AtomicBoolean(false);
     private final Logger logger;
-//    private final AtomicReference<String> token;
     private String token;
 
     public ApiCommunicator() {
@@ -33,9 +30,7 @@ public class ApiCommunicator {
         gson = new Gson();
         client = HttpClient.newHttpClient();
         logger = Bukkit.getLogger();
-//        token = new AtomicReference<>();
         token = "";
-        loginToApi();
     }
 
     public CompletableFuture<JsonObject> sendPostRequest(String endPoint, JsonObject body){
@@ -85,9 +80,6 @@ public class ApiCommunicator {
             .header("Content-Type", "application/json")
             .header("Accept", "application/json")
             .GET();
-//        if(token.get()!=null && !token.get().isEmpty()){
-//            builder.header("Authorization", "Bearer "+token.get());
-//        }
         if(token != null && !token.isEmpty()){
             builder.header("Authorization", "Bearer "+token);
         }
@@ -100,9 +92,6 @@ public class ApiCommunicator {
             .header("Content-Type", "application/json")
             .header("Accept", "application/json")
             .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(body)));
-//        if(token.get() != null && !token.get().isEmpty()){
-//            builder.header("Authorization", "Bearer "+token.get());
-//        }
         if(token != null && !token.isEmpty()){
             builder.header("Authorization", "Bearer "+token);
         }
@@ -124,14 +113,14 @@ public class ApiCommunicator {
                 int statusCode = response.statusCode();
                 if(statusCode == 200){
                     JsonObject responseBody = gson.fromJson(response.body(), JsonObject.class);
-//                    token.set(responseBody.get("token").getAsString());
                     token = responseBody.get("token").getAsString();
                     logger.log(Level.INFO, "Successfully logged in");
                 }else{
                     throw new RuntimeException("nuh huh");
                 }
             }).exceptionally(e->{
-                System.err.println(e);
+                logger.log(Level.SEVERE, "Error logging in", e);
+                Bukkit.getPluginManager().disablePlugin(ServerHandler.getInstance());
                 return null;
             });
     }

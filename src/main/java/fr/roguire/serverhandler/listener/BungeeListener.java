@@ -1,9 +1,9 @@
 package fr.roguire.serverhandler.listener;
 
 import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import fr.roguire.serverhandler.ServerHandler;
+import fr.roguire.serverhandler.utils.models.HostedServer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.jetbrains.annotations.NotNull;
@@ -23,22 +23,22 @@ public class BungeeListener implements PluginMessageListener {
         if(!channel.equals("BungeeCord")) return;
         ByteArrayDataInput in = ByteStreams.newDataInput(message);
         String content = in.readUTF();
-        if(!content.equals("GetServers")) return;
+        if(content.equals("GetServers")) readServers(in);
+
+    }
+
+    private void readServers(ByteArrayDataInput in) {
         String[] server = in.readUTF().split(", ");
-        Set<String> uhcServers = new HashSet<>();
-        Set<String> miniGameServers = new HashSet<>();
-        for (String s : server) {
-            if(s.startsWith("minecraft-pvp"))
-                uhcServers.add(s);
-            else if (s.startsWith("minecraft-minigame")) {
-                miniGameServers.add(s);
+        Set<HostedServer> pvpServers = new HashSet<>();
+        Set<HostedServer> minigameServers = new HashSet<>();
+        for(String s : server) {
+            if(s.startsWith("minecraft-pvp")){
+                pvpServers.add(HostedServer.fromCsv(s));
+            }
+            else if(s.startsWith("minecraft-minigame")){
+                minigameServers.add(HostedServer.fromCsv(s));
             }
         }
-
-        serverHandler.getUHCServers().addAll(uhcServers);
-        serverHandler.getMiniGameServers().addAll(miniGameServers);
-
-        serverHandler.getUHCServers().removeIf(serverName -> !uhcServers.contains(serverName));
-        serverHandler.getMiniGameServers().removeIf(miniGameServer -> !miniGameServers.contains(miniGameServer));
+        serverHandler.getServers().refreshServers(pvpServers, minigameServers);
     }
 }

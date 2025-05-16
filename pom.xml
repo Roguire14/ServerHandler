@@ -49,8 +49,9 @@
         <filtering>true</filtering>
           <includes>
               <include>**/*.env</include>
+              <include>plugin.yml</include>
         </includes>
-      </resource>
+        </resource>
     </resources>
   </build>
 

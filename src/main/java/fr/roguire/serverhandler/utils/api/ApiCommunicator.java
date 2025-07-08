@@ -48,7 +48,7 @@ public class ApiCommunicator {
     private CompletableFuture<JsonObject> handleResponse(HttpResponse<String> response) {
         String body = response.body();
         return switch (response.statusCode()) {
-            case 200, 400 -> CompletableFuture.completedFuture(gson.fromJson(body, JsonObject.class));
+            case 200, 400, 404 -> CompletableFuture.completedFuture(gson.fromJson(body, JsonObject.class));
             case 401 -> handleUnauthorized(response);
             default -> {
                 logger.log(Level.SEVERE, "Erreur API (" + response.statusCode() + "): " + body);

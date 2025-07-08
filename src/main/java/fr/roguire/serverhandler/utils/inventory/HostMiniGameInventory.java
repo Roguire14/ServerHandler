@@ -9,6 +9,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,8 +41,14 @@ public class HostMiniGameInventory extends CustomInventory implements HostInvent
 
     @Override
     protected void handleValidClick(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        if (Boolean.TRUE.equals(GameHoster.isPlayerGenerating.get(player))) {
+            player.sendMessage(Component.text("Vous avez déjà un serveur en cours de création /!\\").color(NamedTextColor.RED));
+            return;
+        }
         String blockName = getDisplayName(event.getCurrentItem().displayName());
         host.hostGame(items.get(blockName.toLowerCase()), (Player) event.getWhoClicked());
+        inventory.close();
     }
 
 }

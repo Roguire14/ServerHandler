@@ -1,6 +1,8 @@
 package fr.roguire.serverhandler.utils.inventory;
 
+import fr.roguire.serverhandler.utils.inventory.models.GameHoster;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

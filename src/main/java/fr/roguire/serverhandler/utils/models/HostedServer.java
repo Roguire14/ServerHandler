@@ -21,8 +21,8 @@ import static fr.roguire.serverhandler.utils.UsefullFunctions.setSwordAttributeM
 public record HostedServer(String name, String category, String host, ItemStack block, String serverName) {
 
     public static HostedServer fromCsv(String in) {
-        String[] parts = in.split("-");
-        String type = String.join("-", Arrays.copyOfRange(parts, 2, parts.length - 2));
+        String[] parts = in.split("_");
+        String type = String.join("_", Arrays.copyOfRange(parts, 2, parts.length - 2));
         String itemName = String.join(" ", type);
         String host = parts[parts.length - 1];
         String category = parts[1];

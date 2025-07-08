@@ -39,6 +39,11 @@ public class HostUhcInventory extends CustomInventory implements HostInventory {
 
     @Override
     protected void handleValidClick(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        if (Boolean.TRUE.equals(GameHoster.isPlayerGenerating.get(player))) {
+            player.sendMessage(Component.text("Vous avez déjà un serveur en cours de création /!\\").color(NamedTextColor.RED));
+            return;
+        }
         String blockName = getDisplayName(event.getCurrentItem().displayName());
         host.hostGame(items.get(blockName.toLowerCase()), (Player) event.getWhoClicked());
     }

@@ -24,7 +24,6 @@ public class BungeeListener implements PluginMessageListener {
         ByteArrayDataInput in = ByteStreams.newDataInput(message);
         String content = in.readUTF();
         if(content.equals("GetServers")) readServers(in);
-
     }
 
     private void readServers(ByteArrayDataInput in) {
@@ -32,10 +31,10 @@ public class BungeeListener implements PluginMessageListener {
         Set<HostedServer> pvpServers = new HashSet<>();
         Set<HostedServer> minigameServers = new HashSet<>();
         for(String s : server) {
-            if(s.startsWith("minecraft-pvp")){
+            if(s.startsWith("minecraft_pvp")){
                 pvpServers.add(HostedServer.fromCsv(s));
             }
-            else if(s.startsWith("minecraft-minigame")){
+            else if(s.startsWith("minecraft_minigame")){
                 minigameServers.add(HostedServer.fromCsv(s));
             }
         }

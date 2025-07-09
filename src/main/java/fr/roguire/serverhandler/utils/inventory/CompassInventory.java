@@ -22,15 +22,28 @@ public class CompassInventory extends CustomInventoryBordered {
     private final CustomInventory miniGameInventory;
     private final CustomInventory uhcInventory;
 
-    public CompassInventory(ServerHandler plugin, CustomInventory adminInventory, CustomInventory miniGameInventory, CustomInventory uhcInventory) {
-        super(45, Material.LIGHT_BLUE_STAINED_GLASS_PANE, Component.text("Téléporteur")
-            .color(NamedTextColor.DARK_PURPLE)
-            .decorate(TextDecoration.BOLD));
+    public CompassInventory(ServerHandler plugin, CustomInventory adminInventory,
+                            CustomInventory miniGameInventory, CustomInventory uhcInventory) {
+        this(plugin, adminInventory, miniGameInventory, uhcInventory, false);
+    }
+
+    public CompassInventory(ServerHandler plugin, CustomInventory adminInventory,
+                            CustomInventory miniGameInventory, CustomInventory uhcInventory, boolean isHostView) {
+        super(45, Material.LIGHT_BLUE_STAINED_GLASS_PANE,
+            Component.text("Téléporteur")
+                .color(NamedTextColor.DARK_PURPLE)
+                .decorate(TextDecoration.BOLD));
+
         this.plugin = plugin;
         this.adminInventory = adminInventory;
         this.miniGameInventory = miniGameInventory;
         this.uhcInventory = uhcInventory;
+
         addServers();
+
+        if (isHostView) {
+            inventory.setItem(8, createAdminItem());
+        }
     }
 
     private void addServers() {
@@ -91,15 +104,7 @@ public class CompassInventory extends CustomInventoryBordered {
         }
     }
 
-    @Override
-    public void open(Player player) {
-        if(player.hasPermission("serverhandler.host")) inventory.setItem(8, createAdminItem());
-        else inventory.setItem(8, borderItem);
-        super.open(player);
-    }
-
     private void sendToSurvivalServer(InventoryClickEvent event) {
         plugin.sendToServer((Player)event.getWhoClicked(), "survie");
     }
-
 }

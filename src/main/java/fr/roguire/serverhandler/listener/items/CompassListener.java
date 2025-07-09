@@ -35,7 +35,7 @@ public class CompassListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         if(event.getItem() == null) return;
         if(event.getItem().displayName().equals(compass.getItem().displayName())){
-            compass.getCustomInventory().open(event.getPlayer());
+            compass.onInteract(event);
         }
     }
 }

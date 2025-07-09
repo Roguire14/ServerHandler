@@ -3,3 +3,11 @@ version: '${project.version}'
 main: fr.roguire.serverhandler.ServerHandler
 api-version: '1.21'
 load: STARTUP
+
+commands:
+  permission:
+    description: Pour ajouter une permission à quelqu'un
+    usage: /permission <add|remove> <joueur> <permission>
+    permission: addperm.op
+    permission-message: "Tu dois être OP pour utiliser cette commande"
+

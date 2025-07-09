@@ -47,7 +47,7 @@ public class GameHoster {
                         player.sendMessage(Component.text("Serveur en cours de création.. Connexion dans un instant, veuillez patienter").color(NamedTextColor.GREEN));
                         String serverName = JsonParser.parseString(message).getAsJsonObject().get("name").getAsString();
                         createServerInDB(player, serverName);
-                        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> tryToSendPlayer(player, serverName, 20), 100L);
+                        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> tryToSendPlayer(player, serverName, 30), 100L);
                         break;
                     case 400:
                         player.sendMessage(Component.text(message).color(NamedTextColor.RED));
@@ -79,6 +79,10 @@ public class GameHoster {
         if (maxTries <= 0) return;
         if (!player.isOnline()) return;
         isServerRunning(serverName).thenAccept(isRunning -> {
+            System.out.println(maxTries);
+            System.out.println(player);
+            System.out.println(serverName);
+            System.out.println(isRunning);
             if (isRunning) {
                 isPlayerGenerating.put(player, false);
                 plugin.sendToServer(player, serverName);

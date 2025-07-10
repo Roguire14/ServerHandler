@@ -40,6 +40,13 @@ public class HostMiniGameInventory extends CustomInventory implements HostInvent
     }
 
     @Override
+    public void open(Player player) {
+        inventory.clear();
+        fillHostItems();
+        super.open(player);
+    }
+
+    @Override
     protected void handleValidClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         if (Boolean.TRUE.equals(GameHoster.isPlayerGenerating.get(player))) {

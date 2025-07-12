@@ -10,6 +10,7 @@ import fr.roguire.serverhandler.listener.inventory.InventoryListeners;
 import fr.roguire.serverhandler.listener.items.CompassListener;
 import fr.roguire.serverhandler.listener.player.OnJoinEvent;
 import fr.roguire.serverhandler.utils.BungeeCordCommunicator;
+import fr.roguire.serverhandler.utils.Env;
 import fr.roguire.serverhandler.utils.EventsUtil;
 import fr.roguire.serverhandler.utils.RunningServers;
 import fr.roguire.serverhandler.utils.api.ApiCommunicator;
@@ -53,7 +54,8 @@ public final class ServerHandler extends JavaPlugin {
         loadPermissions();
 
         instance = this;
-        ApiConfig.initializeApiConfig("http://host.docker.internal",25550);
+        String api_url = Env.getKey("API_URL");
+        ApiConfig.initializeApiConfig(api_url, 25550);
         apiCommunicator = new ApiCommunicator();
         apiCommunicator.loginToApi();
 
@@ -90,7 +92,8 @@ public final class ServerHandler extends JavaPlugin {
     public void onDisable() {
         instance = null;
         Bukkit.getScheduler().cancelTasks(this);
-        savePermissions();
+        if(!playerPermissions.isEmpty())
+            savePermissions();
     }
 
     public BungeeCordCommunicator getBungeeCordCommunicator() {
@@ -155,6 +158,19 @@ public final class ServerHandler extends JavaPlugin {
         }
     }
 
+    private void saveEmptyFile(){
+        File configFile = new File(getDataFolder(), "permissions.yml");
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+
+        config.createSection("permissions");
+
+        try {
+            config.save(configFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void addPermission(UUID uuid, String permission){
         playerPermissions.putIfAbsent(uuid, new HashSet<>());
         Player player =  Bukkit.getPlayer(uuid);
@@ -177,7 +193,8 @@ public final class ServerHandler extends JavaPlugin {
         }
         if(perms.isEmpty()) playerPermissions.remove(uuid);
 
-        savePermissions();
+        if(playerPermissions.isEmpty()) saveEmptyFile();
+        else savePermissions();
     }
 
     public void savePermissions() {

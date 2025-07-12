@@ -100,8 +100,8 @@ public class ApiCommunicator {
 
     public CompletableFuture<Void> loginToApi(){
         Map<String, String> body = new HashMap<>();
-        body.put("username", Env.getKey("USERNAME"));
-        body.put("password", Env.getKey("PASSWORD"));
+        body.put("username", Env.getKey("API_USERNAME"));
+        body.put("password", Env.getKey("API_PASSWORD"));
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(this.fullAddress+"/login"))
             .headers("Content-Type", "application/json", "Accept", "application/json")
@@ -115,12 +115,13 @@ public class ApiCommunicator {
                     JsonObject responseBody = gson.fromJson(response.body(), JsonObject.class);
                     token = responseBody.get("token").getAsString();
                     logger.log(Level.INFO, "Successfully logged in");
+                }else if(statusCode == 401){
+                    throw new RuntimeException("Wrong logging");
                 }else{
-                    throw new RuntimeException("nuh huh");
+                    throw new RuntimeException("Why the fuck am I being displayed");
                 }
             }).exceptionally(e->{
                 logger.log(Level.SEVERE, "Error logging in", e);
-                Bukkit.getPluginManager().disablePlugin(ServerHandler.getInstance());
                 return null;
             });
     }

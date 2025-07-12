@@ -17,6 +17,7 @@ RUN echo '[ \
     echo 'settings:\n  bungeecord: true' > spigot.yml
 
 COPY target/ServerHandler-1.0-SNAPSHOT.jar /server/plugins
+COPY ./src/main/resources/.env /server/
 
 EXPOSE 25565
 
